@@ -16,7 +16,7 @@ using namespace std;
 vector<sf::Sprite> load();
 
 // Загрузка фона игры
-sf::Sprite load_background();
+vector<sf::Sprite> load_background();
 
 // Загрузка шрифтов и текстов
 vector<sf::Text> load_texts();

@@ -1,3 +1,7 @@
 24-07-2018:
 - Added menu;
 - Added sound of click mouse;
+
+28-11-2018:
+- I returned! :D
+- Added a possibility to move cards;

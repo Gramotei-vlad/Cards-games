@@ -257,13 +257,16 @@ vector<sf::Sprite> load() {
 	return cards;
 }
 
-sf::Sprite load_background() {
+vector<sf::Sprite> load_background() {
 	sf::Sprite fon;
+	vector<sf::Sprite> fons;
 
 	fon1.loadFromFile("C:\\Users\\связной\\workspace\\Coursera\\src\\PNG\\fon_game.jpg");
 	fon.setTexture(fon1);
 
-	return fon;
+	fons.push_back(fon);
+
+	return fons;
 }
 
 vector<sf::Text> load_texts() {
