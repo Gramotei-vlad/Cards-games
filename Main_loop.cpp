@@ -62,12 +62,15 @@ void game(vector<sf::Sprite>& fons, sf::Sound click) {
 
 	bool round = true;
 
-	vector<sf::Sprite> player_cards = player.showCard(); // Карты на руках
+	vector<sf::Sprite> player_cards = player.showCard();
 	vector<sf::Sprite> rival_cards = rival.showCard();
 
-	vector<sf::Sprite> cards_for_display = player.showCard(); // Карты для показа
+	// Player and rival cards for display
+	vector<sf::Sprite> cards_for_display = player.showCard();
 
-	delta = 0.f;
+	delta = 0.f; // offset a player's card on the desk
+	float delta_r = 0.f; // offset a rival's card on the desk
+	bool player_move = true; // Does player or rival?
 
 	while (round == true) {
 
@@ -79,14 +82,10 @@ void game(vector<sf::Sprite>& fons, sf::Sound click) {
 				round = false;
 			}
 
-            // Play by card
+            // to play by card
 		    if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
 
-		    	// Тут нужно почистить, но вроде работает
-
 			    sf::Vector2i pos_mouse = sf::Mouse::getPosition();
-
-			    // Player_cards изменил на player.showCard()
 
 			    amount_cards = player_cards.size();
 
@@ -96,9 +95,10 @@ void game(vector<sf::Sprite>& fons, sf::Sound click) {
 			    	sf::Sprite check_card = player_cards[i];
 
 				    // Delete a player card and add a card on the desk
-				    if (intersection_card(pos_mouse, pos_new_card) == true) {
+				    if (intersection_card(pos_mouse, pos_new_card) == true
+				    		&& player_move == true) {
 				    	cout << endl;
-				    	cout << "Entered card";
+				    	cout << "Player moves" << endl;
 					    click.play();
 
 					    int pos = find_card(cards_for_display, check_card);
@@ -106,16 +106,27 @@ void game(vector<sf::Sprite>& fons, sf::Sound click) {
 					    cards_for_display[pos].setPosition(550.f + delta, 330.f);
 					    player_cards.erase(player_cards.begin() + i);
 					    player.deleteCard(i);
+
 					    // Offset a card on the desk
 					    delta *= -1;
 					    if (amount_cards % 2 == 0) {
 					    	delta += 150.f;
 					    }
+					    player_move = false;
 					    break;
 				    }
 				}
 			}
         }
+
+		if (player_move == false) {
+            sf::Sprite rival_card = rival.moveCard();
+            cout << "Rival moves" << endl;
+            rival_card.setPosition(550.f + delta_r, 380.f);
+            delta_r = delta;
+            cards_for_display.push_back(rival_card);
+            player_move = true;
+		}
 
 		window.clear();
         window.draw(fon_game);
@@ -126,6 +137,30 @@ void game(vector<sf::Sprite>& fons, sf::Sound click) {
         window.draw(cards_for_display[3]);
         window.draw(cards_for_display[4]);
         window.draw(cards_for_display[5]);
+
+        if (cards_for_display.size() >= 7) {
+        	window.draw(cards_for_display[6]);
+        }
+
+        if (cards_for_display.size() >= 8) {
+        	window.draw(cards_for_display[7]);
+        }
+
+        if (cards_for_display.size() >= 9) {
+            window.draw(cards_for_display[8]);
+        }
+
+        if (cards_for_display.size() >= 10) {
+            window.draw(cards_for_display[9]);
+        }
+
+        if (cards_for_display.size() >= 11) {
+            window.draw(cards_for_display[10]);
+        }
+
+        if (cards_for_display.size() >= 12) {
+            window.draw(cards_for_display[11]);
+        }
 
 
 		window.draw(rival_cards[0]);
@@ -152,6 +187,9 @@ int main()
 	sf::Text quit_game = texts[1];
 
 	sf::Sound click = load_song();
+	sf::Sound main_music = load_main_music();
+
+	main_music.play();
 
 	while (window.isOpen()) {
 

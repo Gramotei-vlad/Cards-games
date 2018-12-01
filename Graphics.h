@@ -9,6 +9,7 @@
 #define GRAPHICS_H_
 #include <SFML/Graphics.hpp>
 #include <vector>
+#include <map>
 
 using namespace std;
 

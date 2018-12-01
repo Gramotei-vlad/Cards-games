@@ -14,6 +14,7 @@
 using namespace std;
 
 sf::Sound load_song();
+sf::Sound load_main_music();
 
 
 

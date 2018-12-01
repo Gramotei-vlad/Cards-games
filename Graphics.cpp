@@ -62,7 +62,7 @@ sf::Font font;
 sf::Text play_text("Play game", font, 50);
 sf::Text quit_text("Quit game", font, 50);
 
-vector<sf::Sprite> load() {
+vector<sf::Sprite>  load() {
 	vector<sf::Sprite> cards;
 
 	sf::Sprite six_clubs;
