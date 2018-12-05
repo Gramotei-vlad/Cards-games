@@ -9,17 +9,19 @@
 #define GRAPHICS_H_
 #include <SFML/Graphics.hpp>
 #include <vector>
-#include <map>
+#include "Card.h"
 
 using namespace std;
 
 // Загрузка спрайтов
-vector<sf::Sprite> load();
+vector<Card> load();
 
 // Загрузка фона игры
 vector<sf::Sprite> load_background();
 
 // Загрузка шрифтов и текстов
 vector<sf::Text> load_texts();
+
+vector<sf::Sprite> load_cardsBack();
 
 #endif /* GRAPHICS_H_ */

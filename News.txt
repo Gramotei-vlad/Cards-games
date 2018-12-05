@@ -9,3 +9,7 @@
 01-12-2018:
 - Added music;
 - Rival moves cards too;
+
+05-12-2018:
+- Rival defend;
+- Player moves cards which have on the desk;

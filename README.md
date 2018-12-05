@@ -1,6 +1,6 @@
 # Cards games
 
-It is a repository with cards games writting in C++ + SFML. 
+It is a repository with cards games written in C++ + SFML. 
 At the moment game is in progress.
 
 To lanch the code, you need:

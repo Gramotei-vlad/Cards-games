@@ -61,9 +61,10 @@ sf::Texture fon1;
 sf::Font font;
 sf::Text play_text("Play game", font, 50);
 sf::Text quit_text("Quit game", font, 50);
+sf::Texture cardBack1;
 
-vector<sf::Sprite>  load() {
-	vector<sf::Sprite> cards;
+vector<Card>  load() {
+	vector<Card> cards;
 
 	sf::Sprite six_clubs;
 	sf::Sprite six_spades;
@@ -112,147 +113,183 @@ vector<sf::Sprite>  load() {
 
 	clubs6.loadFromFile("src\\PNG\\Cards\\cardClubs6.png");
 	six_clubs.setTexture(clubs6);
-	cards.push_back(six_clubs);
+	Card new_six_1(6, "clubs", six_clubs);
+	cards.push_back(new_six_1);
 
 	spades6.loadFromFile("src\\PNG\\Cards\\cardSpades6.png");
 	six_spades.setTexture(spades6);
-	cards.push_back(six_spades);
+	Card new_six_2(6, "spades", six_spades);
+	cards.push_back(new_six_2);
 
 	diamonds6.loadFromFile("src\\PNG\\Cards\\cardDiamonds6.png");
 	six_diamonds.setTexture(diamonds6);
-	cards.push_back(six_diamonds);
+	Card new_six_3(6, "diamonds", six_diamonds);
+	cards.push_back(new_six_3);
 
 	hearts6.loadFromFile("src\\PNG\\Cards\\cardHearts6.png");
 	six_hearts.setTexture(hearts6);
-	cards.push_back(six_hearts);
+	Card new_six_4(6, "hearts", six_hearts);
+	cards.push_back(new_six_4);
 
 	clubs7.loadFromFile("src\\PNG\\Cards\\cardClubs7.png");
 	seven_clubs.setTexture(clubs7);
-	cards.push_back(seven_clubs);
+	Card new_seven_1(7, "clubs", seven_clubs);
+	cards.push_back(new_seven_1);
 
 	spades7.loadFromFile("src\\PNG\\Cards\\cardSpades7.png");
 	seven_spades.setTexture(spades7);
-	cards.push_back(seven_spades);
+	Card new_seven_2(7, "spades", seven_spades);
+	cards.push_back(new_seven_2);
 
 	diamonds7.loadFromFile("src\\PNG\\Cards\\cardDiamonds7.png");
 	seven_diamonds.setTexture(diamonds7);
-	cards.push_back(seven_diamonds);
+	Card new_seven_3(7, "diamonds", seven_diamonds);
+	cards.push_back(new_seven_3);
 
 	hearts7.loadFromFile("src\\PNG\\Cards\\cardHearts7.png");
 	seven_hearts.setTexture(hearts7);
-	cards.push_back(seven_hearts);
+	Card new_seven_4(7, "hearts", seven_hearts);
+	cards.push_back(new_seven_4);
 
 	clubs8.loadFromFile("src\\PNG\\Cards\\cardClubs8.png");
 	eight_clubs.setTexture(clubs8);
-	cards.push_back(eight_clubs);
+	Card new_eight_1(8, "clubs", eight_clubs);
+	cards.push_back(new_eight_1);
 
 	spades8.loadFromFile("src\\PNG\\Cards\\cardSpades8.png");
 	eight_spades.setTexture(spades8);
-	cards.push_back(eight_spades);
+	Card new_eight_2(8, "spades", eight_spades);
+	cards.push_back(new_eight_2);
 
 	diamonds8.loadFromFile("src\\PNG\\Cards\\cardDiamonds8.png");
 	eight_diamonds.setTexture(diamonds8);
-	cards.push_back(eight_diamonds);
+	Card new_eight_3(8, "diamonds", eight_diamonds);
+	cards.push_back(new_eight_3);
 
 	hearts8.loadFromFile("src\\PNG\\Cards\\cardHearts8.png");
 	eight_hearts.setTexture(hearts8);
-	cards.push_back(eight_hearts);
+	Card new_eight_4(8, "hearts", eight_hearts);
+	cards.push_back(new_eight_4);
 
 	clubs9.loadFromFile("src\\PNG\\Cards\\cardClubs9.png");
 	nine_clubs.setTexture(clubs9);
-	cards.push_back(nine_clubs);
+	Card new_nine_1(9, "clubs", nine_clubs);
+	cards.push_back(new_nine_1);
 
 	spades9.loadFromFile("src\\PNG\\Cards\\cardSpades9.png");
 	nine_spades.setTexture(spades9);
-	cards.push_back(nine_spades);
+	Card new_nine_2(9, "spades", nine_spades);
+	cards.push_back(new_nine_2);
 
 	diamonds9.loadFromFile("src\\PNG\\Cards\\cardDiamonds9.png");
 	nine_diamonds.setTexture(diamonds9);
-	cards.push_back(nine_diamonds);
+	Card new_nine_3(9, "diamonds", nine_diamonds);
+	cards.push_back(new_nine_3);
 
 	hearts9.loadFromFile("src\\PNG\\Cards\\cardHearts9.png");
 	nine_hearts.setTexture(hearts9);
-	cards.push_back(nine_hearts);
+	Card new_nine_4(9, "hearts", nine_hearts);
+	cards.push_back(new_nine_4);
 
 	clubs10.loadFromFile("src\\PNG\\Cards\\cardClubs10.png");
 	ten_clubs.setTexture(clubs10);
-	cards.push_back(ten_clubs);
+	Card new_ten_1(10, "clubs", ten_clubs);
+	cards.push_back(new_ten_1);
 
 	spades10.loadFromFile("src\\PNG\\Cards\\cardSpades10.png");
 	ten_spades.setTexture(spades10);
-	cards.push_back(ten_spades);
+	Card new_ten_2(10, "spades", ten_spades);
+	cards.push_back(new_ten_2);
 
 	diamonds10.loadFromFile("src\\PNG\\Cards\\cardDiamonds10.png");
 	ten_diamonds.setTexture(diamonds10);
-	cards.push_back(ten_diamonds);
+	Card new_ten_3(10, "diamonds", ten_diamonds);
+	cards.push_back(new_ten_3);
 
 	hearts10.loadFromFile("src\\PNG\\Cards\\cardHearts10.png");
 	ten_hearts.setTexture(hearts10);
-	cards.push_back(ten_hearts);
+	Card new_ten_4(10, "hearts", ten_hearts);
+	cards.push_back(new_ten_4);
 
 	clubsJ.loadFromFile("src\\PNG\\Cards\\cardClubsJ.png");
 	J_clubs.setTexture(clubsJ);
-	cards.push_back(J_clubs);
+	Card new_J_1(11, "clubs", J_clubs);
+	cards.push_back(new_J_1);
 
 	spadesJ.loadFromFile("src\\PNG\\Cards\\cardSpadesJ.png");
 	J_spades.setTexture(spadesJ);
-	cards.push_back(J_spades);
+	Card new_J_2(11, "spades", J_spades);
+	cards.push_back(new_J_2);
 
 	diamondsJ.loadFromFile("src\\PNG\\Cards\\cardDiamondsJ.png");
 	J_diamonds.setTexture(diamondsJ);
-	cards.push_back(J_diamonds);
+	Card new_J_3(11, "diamonds", J_diamonds);
+	cards.push_back(new_J_3);
 
 	heartsJ.loadFromFile("src\\PNG\\Cards\\cardHeartsJ.png");
 	J_hearts.setTexture(heartsJ);
-	cards.push_back(J_hearts);
+	Card new_J_4(11, "hearts", J_hearts);
+	cards.push_back(new_J_4);
 
 	clubsQ.loadFromFile("src\\PNG\\Cards\\cardClubsQ.png");
 	Q_clubs.setTexture(clubsQ);
-	cards.push_back(Q_clubs);
+	Card new_Q_1(12, "clubs", Q_clubs);
+	cards.push_back(new_Q_1);
 
 	spadesQ.loadFromFile("src\\PNG\\Cards\\cardSpadesQ.png");
 	Q_spades.setTexture(spadesQ);
-	cards.push_back(Q_spades);
+	Card new_Q_2(12, "spades", Q_spades);
+	cards.push_back(new_Q_2);
 
 	diamondsQ.loadFromFile("src\\PNG\\Cards\\cardDiamondsQ.png");
 	Q_diamonds.setTexture(diamondsQ);
-	cards.push_back(Q_diamonds);
+	Card new_Q_3(12, "diamonds", Q_diamonds);
+	cards.push_back(new_Q_3);
 
 	heartsQ.loadFromFile("src\\PNG\\Cards\\cardHeartsQ.png");
 	Q_hearts.setTexture(heartsQ);
-	cards.push_back(Q_hearts);
+	Card new_Q_4(12, "hearts", Q_hearts);
+	cards.push_back(new_Q_4);
 
 	clubsK.loadFromFile("src\\PNG\\Cards\\cardClubsK.png");
 	K_clubs.setTexture(clubsK);
-	cards.push_back(K_clubs);
+	Card new_K_1(13, "clubs", K_clubs);
+	cards.push_back(new_K_1);
 
 	spadesK.loadFromFile("src\\PNG\\Cards\\cardSpadesK.png");
 	K_spades.setTexture(spadesK);
-	cards.push_back(K_spades);
+	Card new_K_2(13, "spades", K_spades);
+	cards.push_back(new_K_2);
 
 	diamondsK.loadFromFile("src\\PNG\\Cards\\cardDiamondsK.png");
 	K_diamonds.setTexture(diamondsK);
-	cards.push_back(K_diamonds);
+	Card new_K_3(13, "diamonds", K_diamonds);
+	cards.push_back(new_K_3);
 
 	heartsK.loadFromFile("src\\PNG\\Cards\\cardHeartsK.png");
 	K_hearts.setTexture(heartsK);
-	cards.push_back(K_hearts);
+	Card new_K_4(13, "hearts", K_hearts);
+	cards.push_back(new_K_4);
 
 	clubsA.loadFromFile("src\\PNG\\Cards\\cardClubsA.png");
 	A_clubs.setTexture(clubsA);
-	cards.push_back(A_clubs);
+	Card new_A_1(14, "clubs", A_clubs);
+	cards.push_back(new_A_1);
 
 	spadesA.loadFromFile("src\\PNG\\Cards\\cardSpadesA.png");
 	A_spades.setTexture(spadesA);
-	cards.push_back(A_spades);
+	Card new_A_2(14, "spades", A_spades);
+	cards.push_back(new_A_2);
 
 	diamondsA.loadFromFile("src\\PNG\\Cards\\cardDiamondsA.png");
 	A_diamonds.setTexture(diamondsA);
-	cards.push_back(A_diamonds);
+	Card new_A_3(14, "diamonds", A_diamonds);
+	cards.push_back(new_A_3);
 
 	heartsA.loadFromFile("src\\PNG\\Cards\\cardHeartsA.png");
 	A_hearts.setTexture(heartsA);
-	cards.push_back(A_hearts);
+	Card new_A_4(14, "hearts", A_hearts);
+	cards.push_back(new_A_4);
 
 	return cards;
 }
@@ -279,6 +316,14 @@ vector<sf::Text> load_texts() {
 	quit_text.setPosition(550, 400);
 	quit_text.setFillColor(sf::Color::Red);
 	return {play_text, quit_text};
+}
+
+vector<sf::Sprite> load_cardsBack() {
+	sf::Sprite cardBack;
+
+	cardBack1.loadFromFile("C:\\Users\\связной\\workspace\\Coursera\\src\\PNG\\Cards\\cardBack_blue1.png");
+	cardBack.setTexture(cardBack1);
+	return {cardBack};
 }
 
 

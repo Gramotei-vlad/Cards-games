@@ -37,6 +37,15 @@ bool operator==(const sf::Sprite& a, const sf::Sprite& b) {
 	return a.getPosition().x == b.getPosition().x && a.getPosition().y == b.getPosition().y;
 }
 
+bool operator<(const Card& a, const Card& b) {
+	return a.showValue() < b.showValue();
+
+}
+
+bool operator==(const Card& a, const Card& b) {
+	return a.showValue() == b.showValue() && a.showSuit() == b.showSuit();
+}
+
 int find_card(vector<sf::Sprite> sprites, sf::Sprite picture) {
 	int pos = 0;
 	for (sf::Sprite sprite : sprites) {
