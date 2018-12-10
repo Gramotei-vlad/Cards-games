@@ -34,3 +34,7 @@ int Card::showValue() const {
 string Card::showSuit() const {
 	return suit;
 }
+
+void Card::setPosition(float x, float y) {
+	image.setPosition(x, y);
+}

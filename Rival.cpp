@@ -9,10 +9,7 @@
 void Rival::getCard(Card card) {
 	rival_value_cards.push_back(card);
 
-	sf::Sprite image_card = card.showCard();
-	image_card.setPosition(330.f + delta, 0.f);
-	delta += 120.f;
-	rival_image_cards.push_back(image_card);
+	Rival::sortCards();
 }
 
 vector<sf::Sprite> Rival::showCards() {
@@ -22,15 +19,30 @@ vector<sf::Sprite> Rival::showCards() {
 void Rival::deleteCard(int pos) {
 	rival_image_cards.erase(rival_image_cards.begin() + pos);
 	rival_value_cards.erase(rival_value_cards.begin() + pos);
-	delta -= 120.f;
+	//delta -= 120.f;
 }
 
-sf::Sprite Rival::moveCard() {
-	srand( time(0) );
-	int pos = rand() % rival_image_cards.size();
-    sf::Sprite card_for_move = rival_image_cards[pos];
-	Rival::deleteCard(pos);
-	return card_for_move;
+Card Rival::moveCard(vector<Card> active_card) {
+	Card card_for_move;
+	if (active_card.size() == 0) {
+		srand( time(0) );
+	    int pos = rand() % rival_value_cards.size();
+        card_for_move = rival_value_cards[pos];
+	    Rival::deleteCard(pos);
+	    return card_for_move;
+	}
+	else {
+		for (Card desk_card : active_card) {
+			for (size_t i = 0; i < rival_value_cards.size(); i ++) {
+				if (desk_card.showValue() == rival_value_cards[i].showValue()) {
+					card_for_move = rival_value_cards[i];
+					Rival::deleteCard(i);
+					break;
+				}
+			}
+		}
+		return card_for_move;
+	}
 }
 
 Card Rival::defend(Card card) {
@@ -70,4 +82,14 @@ int Rival::amountCards() {
 	return rival_value_cards.size();
 }
 
-
+void Rival::sortCards() {
+	sort(rival_value_cards.begin(), rival_value_cards.end());
+	rival_image_cards.clear();
+	float delta = 0.f;
+    for (size_t i = 0; i < rival_value_cards.size(); i++) {
+    	sf::Sprite image_card = rival_value_cards[i].showCard();
+    	image_card.setPosition(330.f + delta, 0.f);
+    	delta += 120.f;
+    	rival_image_cards.push_back(image_card);
+    }
+}

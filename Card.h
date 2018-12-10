@@ -19,6 +19,7 @@ public:
 	sf::Sprite showCard() const;
 	int showValue() const;
 	string showSuit() const;
+	void setPosition(float x, float y);
 
 private:
 	int value;

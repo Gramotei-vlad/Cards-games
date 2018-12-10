@@ -6,7 +6,7 @@
  */
 #include "Player.h"
 
-void Player::getCards(Card card) {
+void Player::getCard(Card card) {
 	player_values_cards.push_back(card);
     Player::sortCards();
     // Necessary call a method showCards in main loop!!!!!
@@ -20,6 +20,7 @@ void Player::deleteCard(int pos) {
 	player_image_cards.erase(player_image_cards.begin() + pos);
 	player_values_cards.erase(player_values_cards.begin() + pos);
 	// delta -= 120.f;
+	Player::sortCards();
 }
 
 Card Player::returnCard(int pos) {

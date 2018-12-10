@@ -13,3 +13,9 @@
 05-12-2018:
 - Rival defend;
 - Player moves cards which have on the desk;
+
+10-12-2018:
+- First work build of the game;
+- Added new UI elements;
+- Fixed bugs;
+- Change colors of the texts;

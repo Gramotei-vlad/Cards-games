@@ -61,6 +61,9 @@ sf::Texture fon1;
 sf::Font font;
 sf::Text play_text("Play game", font, 50);
 sf::Text quit_text("Quit game", font, 50);
+sf::Text win_text("You are a winner!", font, 50);
+sf::Text lose_text("You are a loser!", font, 50);
+sf::Text confirmation_text("Are you sure? Y/N", font, 50);
 sf::Texture cardBack1;
 
 vector<Card>  load() {
@@ -311,11 +314,21 @@ vector<sf::Text> load_texts() {
 		cout << "Font is no";
 
 	play_text.setPosition(550, 300);
-	play_text.setFillColor(sf::Color::Red);
+	play_text.setFillColor(sf::Color::Cyan);
+
+	win_text.setPosition(500, 300);
+	win_text.setFillColor(sf::Color::Green);
+
+	lose_text.setPosition(500, 300);
+	lose_text.setFillColor(sf::Color::Red);
 
 	quit_text.setPosition(550, 400);
 	quit_text.setFillColor(sf::Color::Red);
-	return {play_text, quit_text};
+
+	confirmation_text.setPosition(500, 300);
+	confirmation_text.setFillColor(sf::Color::Red);
+
+	return {play_text, quit_text, win_text, lose_text, confirmation_text};
 }
 
 vector<sf::Sprite> load_cardsBack() {

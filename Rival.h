@@ -10,6 +10,7 @@
 #include "SFML/Graphics.hpp"
 #include <random>
 #include "Card.h"
+#include "Utils.h"
 #include <iostream>
 
 using namespace std;
@@ -19,9 +20,10 @@ public:
 	void getCard(Card card);
 	vector<sf::Sprite> showCards();
 	void deleteCard(int pos);
-	sf::Sprite moveCard();
+	Card moveCard(vector<Card> active_cards);
 	Card defend(Card card);
 	int amountCards();
+	void sortCards();
 private:
 	vector<sf::Sprite> rival_image_cards;
 	vector<Card> rival_value_cards;

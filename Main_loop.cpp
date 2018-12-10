@@ -24,12 +24,17 @@ using namespace std;
 
 sf::RenderWindow window(sf::VideoMode(1366, 768), "Card game!", sf::Style::Fullscreen);
 
-void game(vector<sf::Sprite>& fons, sf::Sound click) {
+void game(vector<sf::Sprite>& fons, sf::Sound click, vector<sf::Text> texts)
+{
 
 	vector<Card> cards = load();
 	sf::Sprite fon_game = fons[0];
 
-	Player player;
+	sf::Text win_game = texts[0];
+	sf::Text lose_game = texts[1];
+	sf::Text confirmation_text = texts[2];
+
+	Player player; // class of a Player
 
 	// Automatic randomization
 	srand(time(0));
@@ -39,7 +44,7 @@ void game(vector<sf::Sprite>& fons, sf::Sound click) {
 	for (int i = 0; i < amount_cards; i++) {
 		int pos = rand() % cards.size();
 		Card new_card = cards[pos];
-		player.getCards(new_card);
+		player.getCard(new_card);
 
 		// Card are deleted from deck
 		cards.erase(cards.begin() + pos);
@@ -61,17 +66,18 @@ void game(vector<sf::Sprite>& fons, sf::Sound click) {
 	vector<sf::Sprite> player_cards = player.showCards();
 	vector<sf::Sprite> rival_cards = rival.showCards();
 
-	// Player and rival cards for display
-	vector<sf::Sprite> cards_for_display = player.showCards();
-
 	float delta = 0.f; // offset a player's card on the desk
 	float delta_r = 0.f; // offset a rival's card on the desk
 	bool player_move = true; // Does player or rival?
 	bool rival_defend = true; // Does rival defend?
+	bool player_check = false; // Unhide win text
+	bool rival_check = false; // Unhide lose text
+	bool show_conf_text = false;
+	bool backspace = false; // Button backspace are pressed
 
 	Card active_card; // Card on the desk
+	Card rival_card;
 	vector<Card> actives_cards; // Cards on the desk
-	vector<int> positions;
 
 	while (round == true) {
 
@@ -80,14 +86,40 @@ void game(vector<sf::Sprite>& fons, sf::Sound click) {
 		while (window.pollEvent(event2)) {
 			// Quit to menu
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace)) {
-				round = false;
+				show_conf_text = true;
+				backspace = true;
 			}
 
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)) {
-				/*for (int new_pos : positions) {
-					cards_for_display.erase(cards_for_display.begin() + new_pos);
-				}*/
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Y) && backspace == true) {
+				round = false;
+				show_conf_text = true;
+				backspace = false;
+			}
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::N) && backspace == true) {
+				show_conf_text = false;
+				backspace = false;
+			}
+
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter) && rival_defend == true) {
+				rival_defend = false;
+				player_move = false;
+				delta = 0.f;
+				delta_r = 0.f;
+				cout << "Player's round is over" << endl;
+				cout << endl;
 				actives_cards.clear();
+			}
+
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::R) and rival_defend == false) {
+				cout << "Player takes cards" << endl;
+				for (Card card : actives_cards) {
+					player.getCard(card);
+				}
+				player_move = false;
+				delta = 0.f;
+				delta_r = 0.f;
+				actives_cards.clear();
+				player_cards = player.showCards();
 			}
 
             // to play by card
@@ -103,48 +135,66 @@ void game(vector<sf::Sprite>& fons, sf::Sound click) {
 			    	sf::Sprite check_card = player_cards[i];
 			    	bool check = false;
 
-				    // Delete a player card and add a card on the desk
-				    if (intersection_card(pos_mouse, pos_new_card) == true
-				    		&& player_move == true) {
-				    	active_card = player.returnCard(i);
-				    	for (Card card : actives_cards) {
-				    		if (card.showValue() == active_card.showValue()) {
-				    			     check = true;
-				    			     break;
-				    	          }
-				    	}
+			    	if (intersection_card(pos_mouse, pos_new_card) == true
+			    					    		&& player_move == true)
+			    	{
+			    		active_card = player.returnCard(i);
+			    		if (rival_defend == true) {
+			    			// active_card = player.returnCard(i);
+			    			if (actives_cards.size() == 0) {
+			    				check = true;
+			    			}
+			    			else {
+			    			for (Card card : actives_cards) {
+			    				if (card.showValue() == active_card.showValue()) {
+			    				     check = true;
+			    				     break;
+			    				}
+			    			  }
+			    		    }
+			    			if (check == true) {
+			    				click.play();
+			    				cout << "Player moves" << endl;
 
-				    	if (actives_cards.size() == 0) {
-				    		check = true;
-				    	}
+			    				active_card.setPosition(550.f + delta, 330.f);
+			    				// delta = delta_r;
+			    				delta *= -1;
+			    				if (amount_cards % 2 == 0) {
+			    					delta += 150.f;
+			    				}
+			    				player.deleteCard(i);
+			    				actives_cards.push_back(active_card);
+			    				player_cards = player.showCards();
+			    				player_move = false;
+			    				break;
 
-				    	if (check == true) {
-				    		cout << endl;
-				    	    cout << "Player moves" << endl;
-				    		click.play();
+			    		     }
+			    		}
+			    		else {
+			    			if (active_card.showValue() >= rival_card.showValue() &&
+			    					active_card.showSuit() == rival_card.showSuit())
+			    			{
+			    				click.play();
+			    				cout << "Player defend" << endl;
+			    				active_card.setPosition(550.f + delta, 380.f);
+			    				// delta = delta_r;
+			    				/*delta *= -1;
+			    				if (amount_cards % 2 == 0) {
+			    					delta += 150.f;
+			    				}*/
+			    				player.deleteCard(i);
+			    				actives_cards.push_back(active_card);
+			    				player_cards = player.showCards();
+			    				player_move = false;
+			    				break;
 
-				    		int pos = find_card(cards_for_display, check_card);
+			    			}
+			    		}
+			    	}
 
-				    		cards_for_display[pos].setPosition(550.f + delta, 330.f);
-				    		// active_card = player.returnCard(i);
-				    		player_cards.erase(player_cards.begin() + i);
-				    		player.deleteCard(i);
-
-				    		actives_cards.push_back(active_card);
-				    		positions.push_back(pos);
-
-				    		// Offset a card on the desk
-				    		delta *= -1;
-				    		if (amount_cards % 2 == 0) {
-				    			delta += 150.f;
-				    		}
-				    	    player_move = false;
-				    	    break;
-				    	}
-				    }
-				}
-			}
-        }
+				 }
+		    }
+	    }
 
 		if (player_move == false && rival_defend == true) {
 			Card defend_card = rival.defend(active_card);
@@ -155,18 +205,52 @@ void game(vector<sf::Sprite>& fons, sf::Sound click) {
 				}
 				// actives_cards.clear();
 				rival_cards = rival.showCards();
+				delta = 0;
+				delta_r = 0;
+				actives_cards.clear();
 				player_move = true;
 			}
 			else {
-				cout << "Rival defended";
-				sf::Sprite image_defend_card = defend_card.showCard();
-				image_defend_card.setPosition(550.f + delta_r, 380.f);
+				cout << "Rival defended" << endl;
+				defend_card.setPosition(550.f + delta_r, 380.f);
 				delta_r = delta;
-				cards_for_display.push_back(image_defend_card);
 				actives_cards.push_back(defend_card);
 				player_move = true;
 			}
+			rival_cards = rival.showCards();
 		}
+		else if (player_move == false && rival_defend == false) {
+			cout << "Rival moves" << endl;
+			rival_card = rival.moveCard(actives_cards);
+			// cout << rival_card.showValue() << endl;
+			if (rival_card.showValue() == 0) {
+				player_move = true;
+				rival_defend = true;
+				delta = 0.f;
+				delta_r = 0.f;
+				cout << "Rival's round is over" << endl;
+				cout << endl;
+				cout << rival_defend << endl;
+				actives_cards.clear();
+			}
+			else {
+				rival_cards = rival.showCards();
+				rival_card.setPosition(550.f + delta_r, 330.f);
+
+				delta_r *= -1;
+				// Поменял amount_cards на actives_cards.size()
+				if (actives_cards.size() % 2 == 0) {
+					delta_r += 150.f;
+				}
+
+				actives_cards.push_back(rival_card);
+				player_move = true;
+			}
+		}
+
+		/*if (player_move == false && rival_defend == false) {
+			cout << "Rival moves" << endl;
+		}*/
 
 		/*if (player_move == false && rival_defend == false) {
             sf::Sprite rival_card = rival.moveCard();
@@ -177,64 +261,115 @@ void game(vector<sf::Sprite>& fons, sf::Sound click) {
             player_move = true;
 		} */
 
+		//cout << "Rival_defend is" << rival_defend << endl;
+
 		window.clear();
         window.draw(fon_game);
+
+        if (player_cards.size() == 0 && rival_check == false) {
+        	cout << "Player wins!" << endl;
+        	player_check = true;
+        	rival_cards = {};
+        	actives_cards.clear();
+            window.draw(win_game);
+        }
+
+        if (rival_cards.size() == 0 && player_check == false) {
+        	cout << "Player loses!" << endl;
+        	player_cards = {};
+        	rival_check = true;
+        	actives_cards.clear();
+        	window.draw(lose_game);
+        }
 
         sf::Sprite new_card = active_card.showCard();
         new_card.setPosition(0.f, 0.f);
         window.draw(new_card);
 
-        window.draw(cards_for_display[0]);
-        window.draw(cards_for_display[1]);
-        window.draw(cards_for_display[2]);
-        window.draw(cards_for_display[3]);
-
-        if (cards_for_display.size() >= 5) {
-        	window.draw(cards_for_display[4]);
+        if (player_cards.size() >= 1) {
+        	window.draw(player_cards[0]);
         }
-
-        if (cards_for_display.size() >= 6) {
-        	window.draw(cards_for_display[5]);
+        if (player_cards.size() >= 2) {
+        	window.draw(player_cards[1]);
         }
-
-        if (cards_for_display.size() >= 7) {
-        	window.draw(cards_for_display[6]);
+        if (player_cards.size() >= 3) {
+        	window.draw(player_cards[2]);
         }
-
-        if (cards_for_display.size() >= 8) {
-        	window.draw(cards_for_display[7]);
+        if (player_cards.size() >= 4) {
+            window.draw(player_cards[3]);
         }
-
-        if (cards_for_display.size() >= 9) {
-            window.draw(cards_for_display[8]);
+        if (player_cards.size() >= 5) {
+            window.draw(player_cards[4]);
         }
-
-        if (cards_for_display.size() >= 10) {
-            window.draw(cards_for_display[9]);
+        if (player_cards.size() >= 6) {
+            window.draw(player_cards[5]);
         }
-
-        if (cards_for_display.size() >= 11) {
-            window.draw(cards_for_display[10]);
+        if (player_cards.size() >= 7) {
+        	window.draw(player_cards[6]);
         }
-
-        if (cards_for_display.size() >= 12) {
-            window.draw(cards_for_display[11]);
+        if (player_cards.size() >= 8) {
+        	window.draw(player_cards[7]);
         }
 
 
-		window.draw(rival_cards[0]);
-		window.draw(rival_cards[1]);
-		window.draw(rival_cards[2]);
-	    window.draw(rival_cards[3]);
-		window.draw(rival_cards[4]);
-		window.draw(rival_cards[5]);
+        if (actives_cards.size() >= 1) {
+        	window.draw(actives_cards[0].showCard());
+        }
+        if (actives_cards.size() >= 2) {
+            window.draw(actives_cards[1].showCard());
+        }
+        if (actives_cards.size() >= 3) {
+        	window.draw(actives_cards[2].showCard());
+        }
+        if (actives_cards.size() >= 4) {
+        	window.draw(actives_cards[3].showCard());
+        }
+        if (actives_cards.size() >= 5) {
+        	window.draw(actives_cards[4].showCard());
+        }
+        if (actives_cards.size() >= 6) {
+        	window.draw(actives_cards[5].showCard());
+        }
 
+
+        if (rival_cards.size() >= 1) {
+        	window.draw(rival_cards[0]);
+        }
+        if (rival_cards.size() >= 2) {
+            window.draw(rival_cards[1]);
+        }
+        if (rival_cards.size() >= 3) {
+            window.draw(rival_cards[2]);
+        }
+        if (rival_cards.size() >= 4) {
+            window.draw(rival_cards[3]);
+        }
+        if (rival_cards.size() >= 5) {
+            window.draw(rival_cards[4]);
+        }
+        if (rival_cards.size() >= 6) {
+            window.draw(rival_cards[5]);
+        }
 		if (rival_cards.size() >= 7) {
 			window.draw(rival_cards[6]);
 		}
 
 		if (rival_cards.size() >= 8) {
 			window.draw(rival_cards[7]);
+		}
+
+		if (rival_cards.size() >= 9) {
+			window.draw(rival_cards[8]);
+		}
+
+		if (show_conf_text == true) {
+			if (player_check == true || rival_check == true) {
+				confirmation_text.setPosition(500, 400);
+			}
+			else {
+				confirmation_text.setPosition(500, 300);
+			}
+			window.draw(confirmation_text);
 		}
 
 		window.display();
@@ -252,6 +387,8 @@ int main()
 
 	sf::Text play_game = texts[0];
 	sf::Text quit_game = texts[1];
+	texts.erase(texts.begin()); // Play_text delete
+	texts.erase(texts.begin()); // quit_text delete
 
 	sf::Sound click = load_song();
 	sf::Sound main_music = load_main_music();
@@ -276,7 +413,7 @@ int main()
 
 				if (intersection(pos_mouse, pos_text_game) == true) {
 					click.play();
-					game(fons_game, click);
+					game(fons_game, click, texts);
 				}
 
 				if (intersection(pos_mouse, pos_text_quit) == true) {
