@@ -22,7 +22,7 @@ public:
 	void deleteCard(int pos);
 	Card moveCard(vector<Card> active_cards);
 	Card defend(Card card);
-	int amountCards();
+	int amountCards() const;
 	void sortCards();
 private:
 	vector<sf::Sprite> rival_image_cards;

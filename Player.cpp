@@ -27,7 +27,7 @@ Card Player::returnCard(int pos) {
 	return player_values_cards[pos];
 }
 
-int Player::amountCards() {
+int Player::amountCards() const {
 	return player_values_cards.size();
 }
 

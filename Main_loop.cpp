@@ -33,6 +33,7 @@ void game(vector<sf::Sprite>& fons, sf::Sound click, vector<sf::Text> texts)
 	sf::Text win_game = texts[0];
 	sf::Text lose_game = texts[1];
 	sf::Text confirmation_text = texts[2];
+	sf::Text no_winners = texts[3];
 
 	Player player; // class of a Player
 
@@ -70,8 +71,7 @@ void game(vector<sf::Sprite>& fons, sf::Sound click, vector<sf::Text> texts)
 	float delta_r = 0.f; // offset a rival's card on the desk
 	bool player_move = true; // Does player or rival?
 	bool rival_defend = true; // Does rival defend?
-	bool player_check = false; // Unhide win text
-	bool rival_check = false; // Unhide lose text
+	bool game_is_over = false;
 	bool show_conf_text = false;
 	bool backspace = false; // Button backspace are pressed
 
@@ -266,19 +266,26 @@ void game(vector<sf::Sprite>& fons, sf::Sound click, vector<sf::Text> texts)
 		window.clear();
         window.draw(fon_game);
 
-        if (player_cards.size() == 0 && rival_check == false) {
+        if (player.amountCards() == 0 && rival.amountCards() > 0) {
         	cout << "Player wins!" << endl;
-        	player_check = true;
         	rival_cards = {};
         	actives_cards.clear();
+        	game_is_over = true;
             window.draw(win_game);
         }
 
-        if (rival_cards.size() == 0 && player_check == false) {
+        if (player.amountCards() == 0 && rival.amountCards() == 0) {
+        	cout << "No winners" << endl;
+        	actives_cards.clear();
+        	game_is_over = true;
+        	window.draw(no_winners);
+        }
+
+        if (player.amountCards() > 0 && rival.amountCards() == 0) {
         	cout << "Player loses!" << endl;
         	player_cards = {};
-        	rival_check = true;
         	actives_cards.clear();
+        	game_is_over = true;
         	window.draw(lose_game);
         }
 
@@ -363,7 +370,7 @@ void game(vector<sf::Sprite>& fons, sf::Sound click, vector<sf::Text> texts)
 		}
 
 		if (show_conf_text == true) {
-			if (player_check == true || rival_check == true) {
+			if (game_is_over == true) {
 				confirmation_text.setPosition(500, 400);
 			}
 			else {
@@ -387,11 +394,18 @@ int main()
 
 	sf::Text play_game = texts[0];
 	sf::Text quit_game = texts[1];
-	texts.erase(texts.begin()); // Play_text delete
-	texts.erase(texts.begin()); // quit_text delete
+	sf::Text controller = texts[2];
+	sf::Text setting_1 = texts[3];
+	sf::Text setting_2 = texts[4];
+
+	for (int i = 0; i < 5; i++) {
+		texts.erase(texts.begin());
+	}
 
 	sf::Sound click = load_song();
 	sf::Sound main_music = load_main_music();
+
+	bool show_settings = false;
 
 	main_music.play();
 
@@ -401,6 +415,10 @@ int main()
 
 		while (window.pollEvent(event)) {
 
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace)) {
+				show_settings = false;
+			}
+
 			if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
 
 				// Get a mouse position
@@ -409,11 +427,17 @@ int main()
 				sf::Vector2i pos_mouse = sf::Mouse::getPosition();
 
 				sf::Vector2f pos_text_game = play_game.getPosition();
+				sf::Vector2f pos_text_controller = controller.getPosition();
 				sf::Vector2f pos_text_quit = quit_game.getPosition();
 
 				if (intersection(pos_mouse, pos_text_game) == true) {
 					click.play();
 					game(fons_game, click, texts);
+				}
+
+				if (intersection(pos_mouse, pos_text_controller) == true) {
+					click.play();
+					show_settings = true;
 				}
 
 				if (intersection(pos_mouse, pos_text_quit) == true) {
@@ -430,8 +454,15 @@ int main()
 
 		window.clear();
 		window.draw(fon_game);
-		window.draw(play_game);
-		window.draw(quit_game);
+		if (show_settings == false) {
+			window.draw(play_game);
+			window.draw(controller);
+			window.draw(quit_game);
+		}
+		else {
+			window.draw(setting_1);
+			window.draw(setting_2);
+		}
 		window.display();
 	}
 

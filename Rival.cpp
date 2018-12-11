@@ -78,7 +78,7 @@ Card Rival::defend(Card card) {
 	return defend_card;
 }
 
-int Rival::amountCards() {
+int Rival::amountCards() const {
 	return rival_value_cards.size();
 }
 

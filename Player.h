@@ -20,7 +20,7 @@ public:
 	vector<sf::Sprite> showCards();
 	void deleteCard(int pos);
 	Card returnCard(int pos);
-	int amountCards();
+	int amountCards() const;
 	void sortCards();
 private:
 	vector<sf::Sprite> player_image_cards;

@@ -19,3 +19,8 @@
 - Added new UI elements;
 - Fixed bugs;
 - Change colors of the texts;
+
+11-12-2018:
+- Fixed bugs;
+- Added new texts;
+- Added tips;

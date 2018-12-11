@@ -63,7 +63,11 @@ sf::Text play_text("Play game", font, 50);
 sf::Text quit_text("Quit game", font, 50);
 sf::Text win_text("You are a winner!", font, 50);
 sf::Text lose_text("You are a loser!", font, 50);
+sf::Text no_winners("Whoo! No winners!", font, 50);
 sf::Text confirmation_text("Are you sure? Y/N", font, 50);
+sf::Text controller_text("Controller", font, 50);
+sf::Text setting_1("Finish a round  <<Enter>>", font, 50);
+sf::Text setting_2("Take cards  <<R>>", font, 50);
 sf::Texture cardBack1;
 
 vector<Card>  load() {
@@ -313,7 +317,7 @@ vector<sf::Text> load_texts() {
 	if (!font.loadFromFile("C:\\Users\\связной\\workspace\\Coursera\\src\\PNG\\arial.ttf"))
 		cout << "Font is no";
 
-	play_text.setPosition(550, 300);
+	play_text.setPosition(550, 200);
 	play_text.setFillColor(sf::Color::Cyan);
 
 	win_text.setPosition(500, 300);
@@ -325,10 +329,23 @@ vector<sf::Text> load_texts() {
 	quit_text.setPosition(550, 400);
 	quit_text.setFillColor(sf::Color::Red);
 
+	controller_text.setPosition(550, 300);
+	controller_text.setFillColor(sf::Color::Blue);
+
+	setting_1.setPosition(500, 300);
+	setting_1.setFillColor(sf::Color::Cyan);
+
+	setting_2.setPosition(500, 400);
+	setting_2.setFillColor(sf::Color::Cyan);
+
+	no_winners.setPosition(500, 300);
+	no_winners.setFillColor(sf::Color::Yellow);
+
 	confirmation_text.setPosition(500, 300);
 	confirmation_text.setFillColor(sf::Color::Red);
 
-	return {play_text, quit_text, win_text, lose_text, confirmation_text};
+	return {play_text, quit_text, controller_text, setting_1, setting_2,
+		win_text, lose_text, confirmation_text, no_winners};
 }
 
 vector<sf::Sprite> load_cardsBack() {
