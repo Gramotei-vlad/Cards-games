@@ -9,7 +9,7 @@
 sf::SoundBuffer buffer; // Buffer for click
 sf::SoundBuffer buffer2; // Buffer for a main music
 
-sf::Sound load_song() {
+sf::Sound load_click() {
 	sf::Sound click;
 	buffer.loadFromFile("src\\Music\\click3.wav");
 	click.setBuffer(buffer);

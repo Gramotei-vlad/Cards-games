@@ -12,8 +12,12 @@ void Player::getCard(Card card) {
     // Necessary call a method showCards in main loop!!!!!
 }
 
-vector<sf::Sprite> Player::showCards() {
+vector<sf::Sprite> Player::showCards() const {
 	return player_image_cards;
+}
+
+vector<Card> Player::listCards() const {
+	return player_values_cards;
 }
 
 void Player::deleteCard(int pos) {

@@ -18,13 +18,13 @@ using namespace std;
 class Rival {
 public:
 	void getCard(Card card);
-	vector<sf::Sprite> showCards();
+	vector<sf::Sprite> showCards() const;
 	void deleteCard(int pos);
-	Card moveCard(vector<Card> active_cards);
+	Card moveCard(const vector<Card> active_cards);
 	Card defend(Card card);
 	int amountCards() const;
-	void sortCards();
 private:
+	void sortCards();
 	vector<sf::Sprite> rival_image_cards;
 	vector<Card> rival_value_cards;
 	float delta = 0; // Don't care about it. Offset cards on the screen

@@ -12,37 +12,47 @@ void Rival::getCard(Card card) {
 	Rival::sortCards();
 }
 
-vector<sf::Sprite> Rival::showCards() {
+vector<sf::Sprite> Rival::showCards() const {
 	return rival_image_cards;
 }
 
 void Rival::deleteCard(int pos) {
 	rival_image_cards.erase(rival_image_cards.begin() + pos);
 	rival_value_cards.erase(rival_value_cards.begin() + pos);
+	Rival::sortCards();
 	//delta -= 120.f;
 }
 
-Card Rival::moveCard(vector<Card> active_card) {
+Card Rival::moveCard(const vector<Card> active_cards) {
 	Card card_for_move;
-	if (active_card.size() == 0) {
-		srand( time(0) );
-	    int pos = rand() % rival_value_cards.size();
-        card_for_move = rival_value_cards[pos];
-	    Rival::deleteCard(pos);
-	    return card_for_move;
+    bool flag = false;
+
+    // Fix bug with rival_cards
+    if (rival_value_cards.size() == 0) {
+    	return card_for_move;
+    }
+
+	if (active_cards.size() == 0) {
+		card_for_move = rival_value_cards[0];
+	    Rival::deleteCard(0);
 	}
 	else {
-		for (Card desk_card : active_card) {
+		for (Card desk_card : active_cards) {
 			for (size_t i = 0; i < rival_value_cards.size(); i ++) {
 				if (desk_card.showValue() == rival_value_cards[i].showValue()) {
 					card_for_move = rival_value_cards[i];
 					Rival::deleteCard(i);
+					flag = true;
 					break;
 				}
 			}
-		}
-		return card_for_move;
+			if (flag == true)
+			{
+				break;
+			}
+		 }
 	}
+	return card_for_move;
 }
 
 Card Rival::defend(Card card) {
@@ -56,12 +66,7 @@ Card Rival::defend(Card card) {
 		int rival_value = rival_value_cards[i].showValue();
 		string rival_suit = rival_value_cards[i].showSuit();
 
-		/*cout << "Rival value: " << rival_value << endl;
-		cout << "Rival suit: " << rival_suit << endl;
-		cout << "Player value: " << player_value << endl;
-		cout << "Player suit: " << player_suit << endl;*/
-
-		// Deafen by minimum card
+		// Defend by minimum card
 		if ((rival_value > player_value) && (rival_suit == player_suit)) {
 			if (min_value > rival_value) {
 				min_value = rival_value;

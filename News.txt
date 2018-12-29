@@ -24,3 +24,7 @@
 - Fixed bugs;
 - Added new texts;
 - Added tips;
+
+29-12-2018:
+- Fixed bugs;
+- Rewritten program code;

@@ -17,7 +17,8 @@ using namespace std;
 class Player {
 public:
 	void getCard(Card card);
-	vector<sf::Sprite> showCards();
+	vector<sf::Sprite> showCards() const;
+	vector<Card> listCards() const;
 	void deleteCard(int pos);
 	Card returnCard(int pos);
 	int amountCards() const;
