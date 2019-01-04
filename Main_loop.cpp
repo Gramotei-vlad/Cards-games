@@ -27,77 +27,12 @@
 
 using namespace std;
 
-void game(sf::RenderWindow& window, AudioGame& AudioGame1, vector<sf::Sprite>& fons, vector<sf::Text> texts)
-{
-
-	vector<Card> cards = load();
-	sf::Sprite fon_game = fons[0];
-
-	sf::Text win_game = texts[0];
-	sf::Text lose_game = texts[1];
-	sf::Text confirmation_text = texts[2];
-	sf::Text no_winners = texts[3];
-
-	Player Player1; // class of a Player
-
-	// Automatic randomization
-	srand(time(0));
-
-	// Player gets six cards
-	int amount_cards = 6;
-	for (int i = 0; i < amount_cards; i++) {
-		int pos = rand() % cards.size();
-		Card new_card = cards[pos];
-		Player1.getCard(new_card);
-
-		// Card are deleted from deck
-		cards.erase(cards.begin() + pos);
-	}
-
-	Rival Rival1;
-
-	// Rival gets six cards
-	for (int i = 0; i < amount_cards; i++) {
-		int pos = rand() % cards.size();
-		Card new_card = cards[pos];
-
-		Rival1.getCard(new_card);
-		cards.erase(cards.begin() + pos);
-	}
-
-	Game Game1;
-	DrawGame DrawGame1(fons[0], confirmation_text);
-	Round Round1;
-
-	bool match = true;
-
-	while (match == true) {
-
-        Round1.run(window, DrawGame1, AudioGame1, Game1, Player1, Rival1);
-        match = false;
-	}
-
-}
-
 int main()
 {
 	sf::RenderWindow window(sf::VideoMode(1366, 768), "Card game!", sf::Style::Fullscreen);
-	vector<sf::Sprite> fons_game = load_background();
-	sf::Sprite fon_game = fons_game[0];
-
-	vector<sf::Text> texts = load_texts();
-
-	sf::Text play_game = texts[0];
-	sf::Text quit_game = texts[1];
-	sf::Text controller = texts[2];
-	sf::Text setting_1 = texts[3];
-	sf::Text setting_2 = texts[4];
-
-	for (int i = 0; i < 5; i++) {
-		texts.erase(texts.begin());
-	}
 
 	AudioGame AudioGame1;
+	DrawGame DrawGame1;
 
 	bool show_settings = false;
 
@@ -120,13 +55,15 @@ int main()
 
 				sf::Vector2i pos_mouse = sf::Mouse::getPosition();
 
-				sf::Vector2f pos_text_game = play_game.getPosition();
-				sf::Vector2f pos_text_controller = controller.getPosition();
-				sf::Vector2f pos_text_quit = quit_game.getPosition();
+				vector<sf::Text> game_texts = DrawGame1.gameTexts();
+				sf::Vector2f pos_text_game = game_texts[0].getPosition();
+				sf::Vector2f pos_text_controller = game_texts[1].getPosition();
+				sf::Vector2f pos_text_quit = game_texts[2].getPosition();
 
 				if (intersection(pos_mouse, pos_text_game) == true) {
 					AudioGame1.playClick();
-					game(window, AudioGame1, fons_game, texts);
+					Round Round1;
+					Round1.run(window, DrawGame1, AudioGame1);
 				}
 
 				if (intersection(pos_mouse, pos_text_controller) == true) {
@@ -136,28 +73,25 @@ int main()
 
 				if (intersection(pos_mouse, pos_text_quit) == true) {
 					AudioGame1.playClick();
-					window.close();
+					DrawGame1.close(window);
 				}
 			}
 
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
-				window.close();
+				DrawGame1.close(window);
 			}
 
 		}
 
-		window.clear();
-		window.draw(fon_game);
+		DrawGame1.clear(window);
+		DrawGame1.showBackground(window);
 		if (show_settings == false) {
-			window.draw(play_game);
-			window.draw(controller);
-			window.draw(quit_game);
+			DrawGame1.showMenu(window);
 		}
 		else {
-			window.draw(setting_1);
-			window.draw(setting_2);
+			DrawGame1.showSettings(window);
 		}
-		window.display();
+		DrawGame1.display(window);
 	}
 
     return 0;

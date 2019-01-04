@@ -6,10 +6,21 @@
  */
 #include "DrawGame.h"
 
-DrawGame::DrawGame(const sf::Sprite& new_fon_game, const sf::Text& new_confirmation_text)
+DrawGame::DrawGame()
 {
-	fon_game = new_fon_game;
-	confirmation_text = new_confirmation_text;
+	vector<sf::Sprite> fons_game = load_background();
+	vector<sf::Text> texts = load_texts();
+
+	fon_game = fons_game[0];
+	play_text = texts[0];
+	quit_text = texts[1];
+	controller_text = texts[2];
+	setting_1 = texts[3];
+	setting_2 = texts[4];
+	win_game = texts[5];
+	lose_game = texts[6];
+	confirmation_text = texts[7];
+	no_winners = texts[8];
 }
 
 void DrawGame::showBackground(sf::RenderWindow& window)
@@ -25,6 +36,41 @@ void DrawGame::clear(sf::RenderWindow& window)
 void DrawGame::display(sf::RenderWindow& window)
 {
 	window.display();
+}
+
+void DrawGame::close(sf::RenderWindow& window)
+{
+	window.close();
+}
+
+void DrawGame::showMenu(sf::RenderWindow& window)
+{
+	window.draw(play_text);
+	window.draw(controller_text);
+	window.draw(quit_text);
+}
+
+void DrawGame::showSettings(sf::RenderWindow& window)
+{
+	window.draw(setting_1);
+	window.draw(setting_2);
+}
+
+vector<sf::Text> DrawGame::gameTexts() const
+{
+	return {play_text, controller_text, quit_text,
+		    setting_1, setting_2, win_game,
+		lose_game, confirmation_text, no_winners};
+}
+
+void DrawGame::showDeck(sf::RenderWindow& window, const Game& Game1)
+{
+	if (Game1.checkDeck() == true)
+	{
+		Card card;
+		card.setPosition(1225, 300);
+		window.draw(card.showCard());
+	}
 }
 
 void DrawGame::showDesk(sf::RenderWindow& window, const Game& Game1)
@@ -121,4 +167,21 @@ void DrawGame::showRivalCards(sf::RenderWindow& window, const Rival& Rival1)
 
 void DrawGame::showConfirmation(sf::RenderWindow& window) {
 	window.draw(confirmation_text);
+}
+
+void DrawGame::showEndOfMatch(sf::RenderWindow& window, const string& name)
+{
+	if (name == "player")
+	{
+		window.draw(win_game);
+	}
+	else if (name == "rival")
+	{
+		window.draw(lose_game);
+	}
+	else
+	{
+		window.draw(no_winners);
+	}
+
 }

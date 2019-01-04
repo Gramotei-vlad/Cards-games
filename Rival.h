@@ -8,7 +8,6 @@
 #ifndef RIVAL_H_
 #define RIVAL_H_
 #include "SFML/Graphics.hpp"
-#include <random>
 #include "Card.h"
 #include "Utils.h"
 #include <iostream>

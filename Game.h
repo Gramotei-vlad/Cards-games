@@ -8,6 +8,9 @@
 #ifndef GAME_H_
 #define GAME_H_
 
+#include <random>
+
+#include "Graphics.h"
 #include "Card.h"
 #include "Audio.h"
 #include "Player.h"
@@ -18,16 +21,20 @@ using namespace std;
 
 class Game {
 public:
+	Game();
 	vector<Card> showDesk() const;
+	bool checkDeck() const;
 	bool whoAttacks() const;
 	bool moveCard() const;
 	void changeAssaulter();
+	void giveoutCards(Player& Player1, Rival& Rival1);
 	bool playerAttack(Player& Player1, const sf::Vector2i pos_mouse);
 	bool playerDefend(Player& Player1, const sf::Vector2i pos_mouse);
 	void playerTakesCards(Player& Player1, Rival& Rival1);
 	bool rivalAttack(Rival& Rival1);
 	bool rivalDefend(Rival& Rival1);
 	void rivalTakesCards(Rival& Rival1);
+	string checkWinners(Player& Player1, Rival& Rival1);
 private:
 	bool checkCard(const Card card) const;
 	bool movePermition(const Card card) const;
@@ -36,9 +43,9 @@ private:
 
 	bool move_card_ = true;
 	bool player_assaulter_ = true;
+	vector<Card> deck;
 	vector<Card> desk_cards;
 	Card active_card;
-	vector<sf::Sound> audio_game;
 };
 
 

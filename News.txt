@@ -28,3 +28,7 @@
 29-12-2018:
 - Fixed bugs;
 - Rewritten program code;
+
+04-01-2019:
+- Added deck of cards;
+- Added end of match.

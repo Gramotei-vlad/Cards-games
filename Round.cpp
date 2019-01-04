@@ -18,15 +18,26 @@ Round::Round()
 	round = true;
 }
 
+Game Round::startRound(Player& Player1, Rival& Rival1) {
+	Game Game1;
+	Game1.giveoutCards(Player1, Rival1);
+	return Game1;
+}
+
 void Round::stopRound() {
 	round = false;
 }
 
-void Round::run(sf::RenderWindow& window, DrawGame& DrawGame1, AudioGame& AudioGame1,
-		Game& Game1, Player& Player1, Rival& Rival1)
+void Round::run(sf::RenderWindow& window, DrawGame& DrawGame1, AudioGame& AudioGame1)
 {
+	Player Player1;
+	Rival Rival1;
+
+	Game Game1 = startRound(Player1, Rival1);
+
 	bool check = true;
-	bool backspace = false; // Backspace is pressed
+	bool backspace = false; // Backspace is not pressed
+
 	while (round == true)
 	{
 		sf::Event event3;
@@ -55,13 +66,17 @@ void Round::run(sf::RenderWindow& window, DrawGame& DrawGame1, AudioGame& AudioG
 					sf::Vector2i pos_mouse = sf::Mouse::getPosition();
 					if (Game1.playerAttack(Player1, pos_mouse) == true) {
 						AudioGame1.playClick();
-						Game1.rivalDefend(Rival1);
+						if (Game1.rivalDefend(Rival1) == false)
+						{
+							Game1.giveoutCards(Player1, Rival1);
+						}
 					}
 				}
 
 				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
 				{
 					Game1.changeAssaulter();
+					Game1.giveoutCards(Player1, Rival1);
 				}
 
 			} else {
@@ -69,6 +84,10 @@ void Round::run(sf::RenderWindow& window, DrawGame& DrawGame1, AudioGame& AudioG
 					if (Game1.rivalAttack(Rival1) == true)
 					{
 						check = false;
+					}
+					else
+					{
+						Game1.giveoutCards(Player1, Rival1);
 					}
 				}
 				// check = false;
@@ -84,17 +103,31 @@ void Round::run(sf::RenderWindow& window, DrawGame& DrawGame1, AudioGame& AudioG
 				if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
 				{
 					Game1.playerTakesCards(Player1, Rival1);
+					Game1.giveoutCards(Player1, Rival1);
 					check = true;
 					delay(100);
 				}
 			}
 		}
 
+		string name = Game1.checkWinners(Player1, Rival1);
+
 		DrawGame1.clear(window);
 		DrawGame1.showBackground(window);
-		DrawGame1.showPlayerCards(window, Player1);
-		DrawGame1.showDesk(window, Game1);
-		DrawGame1.showRivalCards(window, Rival1);
+		if (name == "Game is not over")
+		{
+			DrawGame1.showDeck(window, Game1);
+			DrawGame1.showPlayerCards(window, Player1);
+			DrawGame1.showDesk(window, Game1);
+			DrawGame1.showRivalCards(window, Rival1);
+		}
+		else
+		{
+			if (backspace == false)
+			{
+				DrawGame1.showEndOfMatch(window, name);
+			}
+		}
 
 		if (backspace == true)
 		{

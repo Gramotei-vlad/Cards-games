@@ -6,9 +6,23 @@
  */
 #include "Game.h"
 
+Game::Game()
+{
+	deck = load();
+}
+
 vector<Card> Game::showDesk() const
 {
 	return desk_cards;
+}
+
+bool Game::checkDeck() const
+{
+	if (deck.size() == 0)
+	{
+		return false;
+	}
+	return true;
 }
 
 bool Game::checkCard(const Card card) const
@@ -68,7 +82,33 @@ void Game::changeAssaulter()
 	cout << "New round" << endl;
 	desk_cards.clear();
 	player_assaulter_ = not player_assaulter_;
-	cout << bool(player_assaulter_) << endl;
+	// cout << bool(player_assaulter_) << endl;
+}
+
+void Game::giveoutCards(Player& Player1, Rival& Rival1)
+{
+	cout << "Give out cards // ";
+	srand(time(0));
+	if (deck.size() > 0)
+	{
+		while (Player1.amountCards() < 6)
+		{
+			int pos = rand() % deck.size();
+			Card new_card = deck[pos];
+			Player1.getCard(new_card);
+			deck.erase(deck.begin() + pos);
+		}
+
+		while (Rival1.amountCards() < 6)
+		{
+			int pos = rand() % deck.size();
+			Card new_card = deck[pos];
+
+			Rival1.getCard(new_card);
+			deck.erase(deck.begin() + pos);
+		}
+	}
+	cout << "Completed" << endl;
 }
 
 bool Game::playerAttack(Player& Player1, const sf::Vector2i pos_mouse)
@@ -83,12 +123,13 @@ bool Game::playerAttack(Player& Player1, const sf::Vector2i pos_mouse)
 			Card new_card = Player1.returnCard(i);
 			if (Game::movePermition(new_card) == true)
 			{
-				cout << "Player moves" << endl;
+				cout << "Player moves // ";
 				Player1.deleteCard(i);
 				desk_cards.push_back(new_card);
 				active_card = new_card;
 				move_card_ = not move_card_;
 				Game::setPositionsCards();
+				cout << "Completed" << endl;
 				return true;
 			}
 	    }
@@ -109,11 +150,12 @@ bool Game::playerDefend(Player& Player1, const sf::Vector2i pos_mouse)
 
 			if (Game::defendPermition(new_card, active_card) == true)
 			{
-				cout << "Player defends" << endl;
+				cout << "Player defends // ";
 				Player1.deleteCard(i);
 				desk_cards.push_back(new_card);
 				move_card_ = not move_card_;
 				Game::setPositionsCards();
+				cout << "Completed" << endl;
 				return true;
 	        }
 	    }
@@ -123,7 +165,7 @@ bool Game::playerDefend(Player& Player1, const sf::Vector2i pos_mouse)
 
 void Game::playerTakesCards(Player& Player1, Rival& Rival1)
 {
-	cout << "Player takes cards from the desk" << endl;
+	cout << "Player takes cards from the desk // ";
 	while (Rival1.moveCard(Game::showDesk()).showValue() != 0)
 	{
 		Card add_card = Rival1.moveCard(Game::showDesk());
@@ -137,6 +179,7 @@ void Game::playerTakesCards(Player& Player1, Rival& Rival1)
 		Player1.getCard(card);
 	}
 	desk_cards.clear();
+	cout << "Completed" << endl;
 }
 
 bool Game::rivalAttack(Rival& Rival1)
@@ -154,7 +197,8 @@ bool Game::rivalAttack(Rival& Rival1)
 		active_card = rival_card;
 	    move_card_ = not move_card_;
 		Game::setPositionsCards();
-		cout << "Rival attacks" << endl;
+		cout << "Rival attacks // ";
+		cout << "Completed" << endl;
 		return true;
 	}
 }
@@ -168,20 +212,44 @@ bool Game::rivalDefend(Rival& Rival1)
 	}
 	else
 	{
-		cout << "Rival defends" << endl;
+		cout << "Rival defends // ";
 		desk_cards.push_back(rival_card);
 		move_card_ = not move_card_;
 		Game::setPositionsCards();
+		cout << "Completed" << endl;
 		return true;
 	}
 }
 
 void Game::rivalTakesCards(Rival& Rival1)
 {
-	cout << "Rival takes cards from the desk" << endl;
+	cout << "Rival takes cards from the desk // ";
 	for (Card card : desk_cards)
 	{
 		Rival1.getCard(card);
 	}
 	desk_cards.clear();
+	cout << "Completed" << endl;
+}
+
+string Game::checkWinners(Player& Player1, Rival& Rival1)
+{
+	if (deck.size() == 0 && desk_cards.size() == 0)
+	{
+		if (Player1.amountCards() == 0 && Rival1.amountCards() == 0)
+		{
+			return "no_winners";
+		}
+
+		if (Player1.amountCards() == 0)
+		{
+			return "player";
+		}
+
+		if (Rival1.amountCards() == 0)
+		{
+			return "rival";
+		}
+	}
+	return "Game is not over";
 }

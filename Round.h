@@ -17,10 +17,10 @@ class Round
 {
 public:
 	Round();
-	void run(sf::RenderWindow& window, DrawGame& DrawGame1, AudioGame& AudioGame1,
-			Game& Game1, Player& Player1, Rival& Rival1);
-	void stopRound();
+	void run(sf::RenderWindow& window, DrawGame& DrawGame1, AudioGame& AudioGame1);
 private:
+	Game startRound(Player& Player1, Rival& Rival1);
+	void stopRound();
 	bool round;
 };
 
