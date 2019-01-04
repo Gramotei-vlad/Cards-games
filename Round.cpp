@@ -87,7 +87,9 @@ void Round::run(sf::RenderWindow& window, DrawGame& DrawGame1, AudioGame& AudioG
 					}
 					else
 					{
+						cout << "Check 1" << endl;
 						Game1.giveoutCards(Player1, Rival1);
+						cout << "Check 2" << endl;
 					}
 				}
 				// check = false;

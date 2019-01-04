@@ -32,3 +32,6 @@
 04-01-2019:
 - Added deck of cards;
 - Added end of match.
+
+04-01-2019:
+- Fixed critical bug;

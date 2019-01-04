@@ -79,33 +79,42 @@ void Game::setPositionsCards()
 
 void Game::changeAssaulter()
 {
-	cout << "New round" << endl;
+	cout << "New round // ";
 	desk_cards.clear();
 	player_assaulter_ = not player_assaulter_;
 	// cout << bool(player_assaulter_) << endl;
+	cout << "Completed" << endl;
 }
 
 void Game::giveoutCards(Player& Player1, Rival& Rival1)
 {
 	cout << "Give out cards // ";
 	srand(time(0));
-	if (deck.size() > 0)
-	{
-		while (Player1.amountCards() < 6)
-		{
+	while (Player1.amountCards() < 6) {
+		if (deck.size() > 0) {
 			int pos = rand() % deck.size();
 			Card new_card = deck[pos];
+
 			Player1.getCard(new_card);
 			deck.erase(deck.begin() + pos);
 		}
-
-		while (Rival1.amountCards() < 6)
+		else
 		{
+			break;
+		}
+	}
+
+	while (Rival1.amountCards() < 6) {
+		if (deck.size() > 0) {
 			int pos = rand() % deck.size();
 			Card new_card = deck[pos];
 
 			Rival1.getCard(new_card);
 			deck.erase(deck.begin() + pos);
+		}
+		else
+		{
+			break;
 		}
 	}
 	cout << "Completed" << endl;
