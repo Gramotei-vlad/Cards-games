@@ -9,6 +9,29 @@
 Game::Game()
 {
 	deck = load();
+	Game::setTrumpCards();
+}
+
+void Game::setTrumpCards()
+{
+	cout << "Set trump" << endl;
+	srand(time(0));
+
+	vector<string> suits = {"diamonds", "clubs", "hearts", "spades"};
+	int num = rand() % suits.size();
+	trump = suits[num];
+	for (Card& card : deck)
+	{
+		if (card.showSuit() == trump)
+		{
+			card.changeValue(3 * card.showTrumpValue());
+		}
+	}
+}
+
+string Game::getTrump() const
+{
+	return trump;
 }
 
 vector<Card> Game::showDesk() const
@@ -29,7 +52,7 @@ bool Game::checkCard(const Card card) const
 {
 	for (Card curr_card : desk_cards)
 	{
-		if (curr_card.showValue() == card.showValue())
+		if (curr_card.showImageValue() == card.showImageValue())
 		{
 			return true;
 		}
@@ -44,8 +67,9 @@ bool Game::movePermition(const Card card) const
 
 bool Game::defendPermition(const Card player_card, const Card rival_card) const
 {
-	return player_card.showValue() > rival_card.showValue() &&
-			player_card.showSuit() == rival_card.showSuit();
+	return player_card.showTrumpValue() > rival_card.showTrumpValue() &&
+			(player_card.showSuit() == rival_card.showSuit() ||
+			 player_card.showSuit() == trump);
 }
 
 bool Game::whoAttacks() const
@@ -58,22 +82,55 @@ bool Game::moveCard() const
 	return move_card_;
 }
 
-void Game::setPositionsCards()
+
+// Метод, написанный с помощью говнокода.
+// Если проблемы со психикой, не лезте сюда
+void Game::setPositionsCards(bool attack)
 {
-	float delta_x = 0.f;
-	float delta_y = 0.f;
-	for (size_t i = 0; i < desk_cards.size(); i++)
+	size_t amount_desk_cards = desk_cards.size();
+	if (attack == false)
 	{
-		delta_y = i % 2 == 0 ? 0.f : 50.f;
-		if (i != 0 && i != 1)
+		sf::Vector2f pos_card = desk_cards[amount_desk_cards - 2].showCard().getPosition();
+		desk_cards[amount_desk_cards - 1].setPosition(pos_card.x, pos_card.y + 50.f);
+	}
+	else
+	{
+		if (amount_desk_cards % 2 == 0)
 		{
-			if (i % 2 == 0)
-			{
-				delta_x *= -1;
-				delta_x += 150.f;
-			}
+			amount_desk_cards += 1;
 		}
-		desk_cards[i].setPosition(550.f + delta_x, 330.f + delta_y);
+
+		switch(amount_desk_cards)
+		{
+		case 1:
+			amount_desk_cards = desk_cards.size();
+			desk_cards[amount_desk_cards - 1].setPosition(550.f, 310.f);
+			break;
+		case 3:
+			amount_desk_cards = desk_cards.size();
+			desk_cards[amount_desk_cards - 1].setPosition(700.f, 310.f);
+			break;
+		case 5:
+			amount_desk_cards = desk_cards.size();
+			desk_cards[amount_desk_cards - 1].setPosition(400.f, 310.f);
+			break;
+		case 7:
+			amount_desk_cards = desk_cards.size();
+			desk_cards[amount_desk_cards - 1].setPosition(850.f, 310.f);
+			break;
+		case 9:
+			amount_desk_cards = desk_cards.size();
+			desk_cards[amount_desk_cards - 1].setPosition(250.f, 310.f);
+			break;
+		case 11:
+			amount_desk_cards = desk_cards.size();
+			desk_cards[amount_desk_cards - 1].setPosition(1000.f, 310.f);
+			break;
+		case 13:
+			amount_desk_cards = desk_cards.size();
+			desk_cards[amount_desk_cards - 1].setPosition(100.f, 310.f);
+			break;
+		}
 	}
 }
 
@@ -136,8 +193,8 @@ bool Game::playerAttack(Player& Player1, const sf::Vector2i pos_mouse)
 				Player1.deleteCard(i);
 				desk_cards.push_back(new_card);
 				active_card = new_card;
-				move_card_ = not move_card_;
-				Game::setPositionsCards();
+				Game::setPositionsCards(true);
+				//move_card_ = not move_card_;
 				cout << "Completed" << endl;
 				return true;
 			}
@@ -163,7 +220,7 @@ bool Game::playerDefend(Player& Player1, const sf::Vector2i pos_mouse)
 				Player1.deleteCard(i);
 				desk_cards.push_back(new_card);
 				move_card_ = not move_card_;
-				Game::setPositionsCards();
+				Game::setPositionsCards(false);
 				cout << "Completed" << endl;
 				return true;
 	        }
@@ -175,10 +232,10 @@ bool Game::playerDefend(Player& Player1, const sf::Vector2i pos_mouse)
 void Game::playerTakesCards(Player& Player1, Rival& Rival1)
 {
 	cout << "Player takes cards from the desk // ";
-	while (Rival1.moveCard(Game::showDesk()).showValue() != 0)
+	while (Rival1.moveCard(Game::showDesk()).showImageValue() != 0)
 	{
 		Card add_card = Rival1.moveCard(Game::showDesk());
-		if (add_card.showValue() != 0)
+		if (add_card.showImageValue() != 0)
 		{
 			desk_cards.push_back(add_card);
 		}
@@ -194,7 +251,7 @@ void Game::playerTakesCards(Player& Player1, Rival& Rival1)
 bool Game::rivalAttack(Rival& Rival1)
 {
 	Card rival_card = Rival1.moveCard(Game::showDesk());
-	if (rival_card.showValue() == 0)
+	if (rival_card.showImageValue() == 0)
 	{
 		cout << "Rival completes a round" << endl;
 		Game::changeAssaulter();
@@ -205,7 +262,7 @@ bool Game::rivalAttack(Rival& Rival1)
 		desk_cards.push_back(rival_card);
 		active_card = rival_card;
 	    move_card_ = not move_card_;
-		Game::setPositionsCards();
+		Game::setPositionsCards(true);
 		cout << "Rival attacks // ";
 		cout << "Completed" << endl;
 		return true;
@@ -214,9 +271,9 @@ bool Game::rivalAttack(Rival& Rival1)
 
 bool Game::rivalDefend(Rival& Rival1)
 {
-	Card rival_card = Rival1.defend(active_card);
-	if (rival_card.showValue() == 0) {
-		Game::rivalTakesCards(Rival1);
+	Card rival_card = Rival1.defend(active_card, trump);
+	if (rival_card.showImageValue() == 0) {
+		// Game::rivalTakesCards(Rival1);
 		return false;
 	}
 	else
@@ -224,7 +281,7 @@ bool Game::rivalDefend(Rival& Rival1)
 		cout << "Rival defends // ";
 		desk_cards.push_back(rival_card);
 		move_card_ = not move_card_;
-		Game::setPositionsCards();
+		Game::setPositionsCards(false);
 		cout << "Completed" << endl;
 		return true;
 	}

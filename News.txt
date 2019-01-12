@@ -35,3 +35,6 @@
 
 04-01-2019:
 - Fixed critical bug;
+
+12-01-2019:
+- Game is done!

@@ -22,6 +22,6 @@ vector<sf::Sprite> load_background();
 // Загрузка шрифтов и текстов
 vector<sf::Text> load_texts();
 
-vector<sf::Sprite> load_cardsBack();
+sf::Sprite load_cardsBack();
 
 #endif /* GRAPHICS_H_ */

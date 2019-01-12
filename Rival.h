@@ -9,6 +9,7 @@
 #define RIVAL_H_
 #include "SFML/Graphics.hpp"
 #include "Card.h"
+#include "Graphics.h"
 #include "Utils.h"
 #include <iostream>
 
@@ -20,13 +21,13 @@ public:
 	vector<sf::Sprite> showCards() const;
 	void deleteCard(int pos);
 	Card moveCard(const vector<Card> active_cards);
-	Card defend(Card card);
+	Card defend(Card card, const string trump);
 	int amountCards() const;
 private:
-	void sortCards();
+	void setPositionCards();
+	//void sortCards();
 	vector<sf::Sprite> rival_image_cards;
 	vector<Card> rival_value_cards;
-	float delta = 0; // Don't care about it. Offset cards on the screen
 };
 
 

@@ -68,6 +68,9 @@ sf::Text confirmation_text("Are you sure? Y/N", font, 50);
 sf::Text controller_text("Info", font, 50);
 sf::Text setting_1("Finish a round  <<Enter>>", font, 50);
 sf::Text setting_2("Take cards  <<R>>", font, 50);
+sf::Text setting_3("Quit game  <<Backspace>>", font, 50);
+sf::Text bot_take("I take cards!", font, 50);
+sf::Text trump("", font, 50);
 sf::Texture cardBack1;
 
 vector<Card>  load() {
@@ -344,16 +347,25 @@ vector<sf::Text> load_texts() {
 	confirmation_text.setPosition(500, 300);
 	confirmation_text.setFillColor(sf::Color::Red);
 
+	bot_take.setPosition(500, 200);
+	bot_take.setFillColor(sf::Color::Red);
+
+	setting_3.setPosition(500, 500);
+	setting_3.setFillColor(sf::Color::Blue);
+
+	trump.setPosition(1150, 0);
+	trump.setFillColor(sf::Color::Blue);
+
 	return {play_text, quit_text, controller_text, setting_1, setting_2,
-		win_text, lose_text, confirmation_text, no_winners};
+		win_text, lose_text, confirmation_text, no_winners, bot_take, setting_3, trump};
 }
 
-vector<sf::Sprite> load_cardsBack() {
+sf::Sprite load_cardsBack() {
 	sf::Sprite cardBack;
 
 	cardBack1.loadFromFile("C:\\Users\\связной\\workspace\\Coursera\\src\\PNG\\Cards\\cardBack_blue1.png");
 	cardBack.setTexture(cardBack1);
-	return {cardBack};
+	return cardBack;
 }
 
 

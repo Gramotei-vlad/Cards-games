@@ -38,12 +38,12 @@ bool operator==(const sf::Sprite& a, const sf::Sprite& b) {
 }
 
 bool operator<(const Card& a, const Card& b) {
-	return a.showValue() < b.showValue();
+	return a.showTrumpValue() < b.showTrumpValue();
 
 }
 
 bool operator==(const Card& a, const Card& b) {
-	return a.showValue() == b.showValue() && a.showSuit() == b.showSuit();
+	return a.showTrumpValue() == b.showTrumpValue() && a.showSuit() == b.showSuit();
 }
 
 int find_card(vector<sf::Sprite> sprites, sf::Sprite picture) {

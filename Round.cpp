@@ -37,6 +37,7 @@ void Round::run(sf::RenderWindow& window, DrawGame& DrawGame1, AudioGame& AudioG
 
 	bool check = true;
 	bool backspace = false; // Backspace is not pressed
+	bool player_adds_cards = false;
 
 	while (round == true)
 	{
@@ -64,19 +65,34 @@ void Round::run(sf::RenderWindow& window, DrawGame& DrawGame1, AudioGame& AudioG
 
 				if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
 					sf::Vector2i pos_mouse = sf::Mouse::getPosition();
-					if (Game1.playerAttack(Player1, pos_mouse) == true) {
+					if (Game1.playerAttack(Player1, pos_mouse) == true)
+					{
 						AudioGame1.playClick();
-						if (Game1.rivalDefend(Rival1) == false)
+						if (player_adds_cards == false)
 						{
-							Game1.giveoutCards(Player1, Rival1);
+							if (Game1.rivalDefend(Rival1) == false)
+							{
+								player_adds_cards = true;
+							}
 						}
 					}
+
+
 				}
 
 				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
 				{
-					Game1.changeAssaulter();
+					if (player_adds_cards == true)
+					{
+						Game1.rivalTakesCards(Rival1);
+					}
+					else
+					{
+						Game1.changeAssaulter();
+					}
+					player_adds_cards = false;
 					Game1.giveoutCards(Player1, Rival1);
+					delay(100);
 				}
 
 			} else {
@@ -87,9 +103,7 @@ void Round::run(sf::RenderWindow& window, DrawGame& DrawGame1, AudioGame& AudioG
 					}
 					else
 					{
-						cout << "Check 1" << endl;
 						Game1.giveoutCards(Player1, Rival1);
-						cout << "Check 2" << endl;
 					}
 				}
 				// check = false;
@@ -122,6 +136,7 @@ void Round::run(sf::RenderWindow& window, DrawGame& DrawGame1, AudioGame& AudioG
 			DrawGame1.showPlayerCards(window, Player1);
 			DrawGame1.showDesk(window, Game1);
 			DrawGame1.showRivalCards(window, Rival1);
+			DrawGame1.showTrumpInfo(window, Game1);
 		}
 		else
 		{
@@ -129,6 +144,11 @@ void Round::run(sf::RenderWindow& window, DrawGame& DrawGame1, AudioGame& AudioG
 			{
 				DrawGame1.showEndOfMatch(window, name);
 			}
+		}
+
+		if (player_adds_cards == true)
+		{
+			DrawGame1.showBotTakesCards(window);
 		}
 
 		if (backspace == true)

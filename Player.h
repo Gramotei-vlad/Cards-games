@@ -10,6 +10,7 @@
 #include <SFML/Graphics.hpp>
 #include "Card.h"
 #include "Utils.h"
+#include <set>
 
 using namespace std;
 
@@ -22,7 +23,7 @@ public:
 	void deleteCard(int pos);
 	Card returnCard(int pos);
 	int amountCards() const;
-	void sortCards();
+	void setPositionCards();
 private:
 	vector<sf::Sprite> player_image_cards;
 	vector<Card> player_values_cards;

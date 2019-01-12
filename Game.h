@@ -35,14 +35,17 @@ public:
 	bool rivalDefend(Rival& Rival1);
 	void rivalTakesCards(Rival& Rival1);
 	string checkWinners(Player& Player1, Rival& Rival1);
+	string getTrump() const;
 private:
 	bool checkCard(const Card card) const;
+	void setTrumpCards();
 	bool movePermition(const Card card) const;
 	bool defendPermition(const Card player_card, const Card rival_card) const;
-	void setPositionsCards();
+	void setPositionsCards(bool attack);
 
 	bool move_card_ = true;
 	bool player_assaulter_ = true;
+	string trump;
 	vector<Card> deck;
 	vector<Card> desk_cards;
 	Card active_card;

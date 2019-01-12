@@ -48,7 +48,7 @@ int main()
 				show_settings = false;
 			}
 
-			if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && show_settings == false) {
 
 				// Get a mouse position
 				// Check a text position

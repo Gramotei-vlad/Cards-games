@@ -24,6 +24,8 @@ public:
 	void showConfirmation(sf::RenderWindow& window);
 	void showSettings(sf::RenderWindow& window);
 	void showEndOfMatch(sf::RenderWindow& window, const string& name);
+	void showBotTakesCards(sf::RenderWindow& window);
+	void showTrumpInfo(sf::RenderWindow& window, const Game Game1);
 	void clear(sf::RenderWindow& window);
 	void display(sf::RenderWindow& window);
 	void close(sf::RenderWindow& window);
@@ -35,10 +37,13 @@ private:
 	sf::Text controller_text;
 	sf::Text setting_1;
 	sf::Text setting_2;
+	sf::Text setting_3;
 	sf::Text win_game;
 	sf::Text lose_game;
 	sf::Text confirmation_text;
 	sf::Text no_winners;
+	sf::Text bot_takes_cards;
+	sf::Text trump_info;
 };
 
 
